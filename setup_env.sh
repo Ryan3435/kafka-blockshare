@@ -75,4 +75,5 @@ mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
 make -C $HOME/go/src/github.com/hyperledger/fabric peer orderer release docker
 
+sudo apt-get -y install build-essential libglu1-mesa-dev libpulse-dev libglib2.0-dev -y
 go get -u -v github.com/therecipe/qt/cmd/... && $(go env GOPATH)/bin/qtsetup test && $(go env GOPATH)/bin/qtsetup
