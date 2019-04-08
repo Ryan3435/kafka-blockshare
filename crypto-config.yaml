@@ -1,0 +1,22 @@
+OrdererOrgs:
+ - Name: Org1OrdererOrg
+   Domain: org1.com
+   Template:
+     Count: 1
+ - Name: Org2OrdererOrg
+   Domain: org2.com
+   Template:
+     Count: 1
+PeerOrgs:
+ - Name: Org1PeerOrg
+   Domain: peer.org1.com
+   Template:
+     Count: 2
+   Users:
+     Count: 1000
+ - Name: Org2PeerOrg
+   Domain: peer.org2.com
+   Template:
+     Count: 2
+   Users:
+     Count: 10000

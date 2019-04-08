@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  cli:
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - GOROOT=/opt/go
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.peer.uber.com:7051
+      - CORE_PEER_LOCALMSPID=UberPeerOrgMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/crypto-config/peerOrganizations/peer.uber.com/users/Admin@peer.uber.com/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    volumes:
+        - /var/run/:/host/var/run/
+        - ${GOROOT}:/opt/go/
+        - ${GOPATH}:/opt/gopath/
+        - ../chaincode:/opt/gopath/src/chaincode
+        - ../crypto-config/:/opt/gopath/src/github.com/hyperledger/crypto-config/
+        - ../client_applications/:/opt/gopath/src/client_applications/

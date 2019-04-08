@@ -1,0 +1,365 @@
+
+version: '2'
+
+networks:
+    behave:
+
+services:
+    client:
+        container_name: client
+        image: hyperledger/fabric-tools
+        environment:
+            - GOPATH=/opt/gopath
+            - GOROOT=/opt/go
+        command: sleep infinity
+        networks:
+            - behave
+        volumes:
+            - ${GOROOT}:/opt/go/
+            - ${GOPATH}:/opt/gopath
+            - ${GOPATH}/src/github.com/hyperledger/fabric/:/opt/gopath/src/github.com/hyperledger/fabric
+            - ${GOPATH}/src/github.com/hyperledger/fabric-sdk-go/:/opt/gopath/src/github.com/hyperledger/fabric-sdk-go/
+            - ../client_applications/:/client_applications/
+            - ../crypto-config/:/crypto-config/
+            - ../channel-artifacts/:/channel-artifacts/
+
+    cli:
+        container_name: cli
+        extends: 
+            file: docker-compose-cli.yml
+            service: cli
+        command: /bin/bash
+        networks:
+            - behave
+    
+
+              #    client:
+              #        container_name: client
+              #        extends: 
+              #            file: docker-compose-cli.yml
+              #            service: cli
+              #        networks:
+              #            - behave
+
+    zookeeper0:
+        extends:
+            file: docker-compose-base.yml
+            service: zookeeper
+        container_name: zookeeper0
+        environment:
+            - ZOO_MY_ID=1
+            - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+        networks:
+            - behave
+
+    zookeeper1:
+        extends:
+            file: docker-compose-base.yml
+            service: zookeeper
+        container_name: zookeeper1
+        environment:
+            - ZOO_MY_ID=2
+            - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+        networks:
+            - behave
+
+    zookeeper2:
+        extends:
+            file: docker-compose-base.yml
+            service: zookeeper
+        container_name: zookeeper2
+        environment:
+            - ZOO_MY_ID=3
+            - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+        networks:
+            - behave
+
+    kafka0:
+        extends:
+            file: docker-compose-base.yml
+            service: kafka
+        container_name: kafka0
+        environment:
+            - KAFKA_BROKER_ID=0
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+            - KAFKA_MESSAGE_MAX_BYTES=${KAFKA_MESSAGE_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_MAX_BYTES=${KAFKA_REPLICA_FETCH_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES=${KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES}
+        depends_on:
+            - zookeeper0
+            - zookeeper1
+            - zookeeper2
+        networks:
+            - behave
+
+    kafka1:
+        extends:
+            file: docker-compose-base.yml
+            service: kafka
+        container_name: kafka1
+        environment:
+            - KAFKA_BROKER_ID=1
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+            - KAFKA_MESSAGE_MAX_BYTES=${KAFKA_MESSAGE_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_MAX_BYTES=${KAFKA_REPLICA_FETCH_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES=${KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES}
+        depends_on:
+            - zookeeper0
+            - zookeeper1
+            - zookeeper2
+        networks:
+            - behave
+
+    kafka2:
+        extends:
+            file: docker-compose-base.yml
+            service: kafka
+        container_name: kafka2
+        environment:
+            - KAFKA_BROKER_ID=2
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+            - KAFKA_MESSAGE_MAX_BYTES=${KAFKA_MESSAGE_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_MAX_BYTES=${KAFKA_REPLICA_FETCH_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES=${KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES}
+        depends_on:
+            - zookeeper0
+            - zookeeper1
+            - zookeeper2
+        networks:
+            - behave
+
+    kafka3:
+        extends:
+            file: docker-compose-base.yml
+            service: kafka
+        container_name: kafka3
+        environment:
+            - KAFKA_BROKER_ID=3
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+            - KAFKA_MESSAGE_MAX_BYTES=${KAFKA_MESSAGE_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_MAX_BYTES=${KAFKA_REPLICA_FETCH_MAX_BYTES}
+            - KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES=${KAFKA_REPLICA_FETCH_RESPONSE_MAX_BYTES}
+        depends_on:
+            - zookeeper0
+            - zookeeper1
+            - zookeeper2
+        networks:
+            - behave
+
+    orderer0.org1.com:
+        extends:
+            file: docker-compose-base.yml
+            service: orderer
+        container_name: orderer0.org1.com
+        environment:
+            - ORDERER_HOST=orderer0.org1.com
+            - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+            - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+            - ORDERER_KAFKA_RETRY_SHORTTOTAL=30s
+            - ORDERER_KAFKA_VERBOSE=true
+            - ORDERER_GENERAL_GENESISPROFILE=TwoOrgsOrdererGenesis
+            - ORDERER_ABSOLUTEMAXBYTES=${ORDERER_ABSOLUTEMAXBYTES}
+            - ORDERER_PREFERREDMAXBYTES=${ORDERER_PREFERREDMAXBYTES}
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_LOCALMSPID=Org1OrdererMSP
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/custom-configs/genesis.block
+            - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+            - ORDERER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@org1.com/tls/ca.crt
+            - ORDERER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@org1.com/tls/client.crt
+            - ORDERER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@org1.com/tls/client.key
+        volumes:
+            - ../crypto-config/ordererOrganizations/org1.com/orderers/orderer0.org1.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/org1.com/orderers/orderer0.org1.com/tls:/var/hyperledger/tls
+            - ../crypto-config/ordererOrganizations/org1.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+        depends_on:
+            - kafka0
+            - kafka1
+            - kafka2
+            - kafka3
+        networks:
+            - behave
+        ports:
+          - "7050:7050"
+          
+    #NEW
+
+    orderer0.org2.com:
+        extends:
+            file: docker-compose-base.yml
+            service: orderer
+        container_name: orderer0.org2.com
+        environment:
+            - ORDERER_HOST=orderer0.org2.com
+            - CONFIGTX_ORDERER_ORDERERTYPE=kafka
+            - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka0:9092,kafka1:9092,kafka2:9092,kafka3:9092]
+            - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+            - ORDERER_KAFKA_RETRY_SHORTTOTAL=30s
+            - ORDERER_KAFKA_RETRY_LONGINTERVAL=30s
+            - ORDERER_KAFKA_RETRY_LONGTOTAL=5m
+            - ORDERER_KAFKA_VERBOSE=true
+            - ORDERER_GENERAL_GENESISPROFILE=TwoOrgsOrdererGenesis
+            - ORDERER_ABSOLUTEMAXBYTES=${ORDERER_ABSOLUTEMAXBYTES}
+            - ORDERER_PREFERREDMAXBYTES=${ORDERER_PREFERREDMAXBYTES}
+            - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/msp
+            - ORDERER_GENERAL_LOCALMSPID=Org2OrdererMSP
+            - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/custom-configs/genesis.block
+            - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/tls/ca.crt]
+            - ORDERER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@org2.com/tls/ca.crt
+            - ORDERER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@org2.com/tls/client.crt
+            - ORDERER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@org2.com/tls/client.key
+        volumes:
+            - ../crypto-config/ordererOrganizations/org2.com/orderers/orderer0.org2.com/msp:/var/hyperledger/msp
+            - ../crypto-config/ordererOrganizations/org2.com/orderers/orderer0.org2.com/tls:/var/hyperledger/tls
+            - ../crypto-config/ordererOrganizations/org2.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+        depends_on:
+            - kafka0
+            - kafka1
+            - kafka2
+            - kafka3
+        networks:
+            - behave
+        ports:
+          - "8050:7050"
+
+
+    peer0.peer.org1.com:
+        extends:
+            file: docker-compose-base.yml
+            service: peer
+        container_name: peer0.peer.org1.com
+        environment:
+            - CORE_PEER_CHAINCODELISTENADDRESS=peer0.peer.org1.com:7052
+            - CORE_PEER_ID=peer0.peer.org1.com
+            - CORE_PEER_ADDRESS=peer0.peer.org1.com:7051
+            - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.peer.org1.com:7051 peer1.peer.org1.com:7051 peer2.peer.org1.com:7051
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.peer.org1.com:7051
+            - CORE_PEER_GOSSIP_ORGLEADER=true
+            - CORE_PEER_GOSSIP_USELEADERELECTION=false
+            - CORE_PEER_LOCALMSPID=Org1PeerOrgMSP
+            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@peer.org1.com/tls/ca.crt
+            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@peer.org1.com/tls/client.crt
+            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@peer.org1.com/tls/client.key
+        volumes:
+            - ../crypto-config/peerOrganizations/peer.org1.com/peers/peer0.peer.org1.com/msp:/var/hyperledger/msp
+            - ../crypto-config/peerOrganizations/peer.org1.com/peers/peer0.peer.org1.com/tls:/var/hyperledger/tls
+            - ../crypto-config/peerOrganizations/peer.org1.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+            - ../chaincode/:/var/hyperledger/chaincode
+
+        depends_on:
+            - orderer0.org1.com
+            - orderer0.org2.com
+        networks:
+            - behave
+        ports:
+          - "7051:7051"
+          - "7052:7052"
+          - "7053:7053"
+
+    peer1.peer.org1.com:
+        extends:
+            file: docker-compose-base.yml
+            service: peer
+        container_name: peer1.peer.org1.com
+        environment:
+            - CORE_PEER_CHAINCODELISTENADDRESS=peer1.peer.org1.com:7052
+            - CORE_PEER_ID=peer1.peer.org1.com
+            - CORE_PEER_ADDRESS=peer1.peer.org1.com:7051
+            - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.peer.org1.com:7051 peer3.peer.org1.com:7051 peer2.peer.org1.com:7051
+            - CORE_PEER_GOSSIP_ORGLEADER=false
+            - CORE_PEER_GOSSIP_USELEADERELECTION=false
+            - CORE_PEER_LOCALMSPID=Org1PeerOrgMSP
+            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@peer.org1.com/tls/ca.crt
+            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@peer.org1.com/tls/client.crt
+            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@peer.org1.com/tls/client.key
+        volumes:
+            - ../crypto-config/peerOrganizations/peer.org1.com/peers/peer1.peer.org1.com/msp:/var/hyperledger/msp
+            - ../crypto-config/peerOrganizations/peer.org1.com/peers/peer1.peer.org1.com/tls:/var/hyperledger/tls
+            - ../crypto-config/peerOrganizations/peer.org1.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+        depends_on:
+            - orderer0.org1.com
+            - orderer0.org2.com
+            - peer0.peer.org1.com
+        networks:
+            - behave
+        ports:
+          - "8051:7051"
+          - "8052:7052"
+          - "8053:7053"    
+
+          
+    peer0.peer.org2.com:
+        extends:
+            file: docker-compose-base.yml
+            service: peer
+        container_name: peer0.peer.org2.com
+        environment:
+            - CORE_PEER_CHAINCODELISTENADDRESS=peer0.peer.org2.com:7052
+            - CORE_PEER_ID=peer0.peer.org2.com
+            - CORE_PEER_ADDRESS=peer0.peer.org2.com:7051
+            - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.peer.org2.com:7051
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.peer.org2.com:7051
+            - CORE_PEER_GOSSIP_ORGLEADER=true
+            - CORE_PEER_GOSSIP_USELEADERELECTION=false
+            - CORE_PEER_LOCALMSPID=Org2PeerOrgMSP
+            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@peer.org2.com/tls/ca.crt
+            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@peer.org2.com/tls/client.crt
+            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@peer.org2.com/tls/client.key
+        volumes:
+            - ../crypto-config/peerOrganizations/peer.org2.com/peers/peer0.peer.org2.com/msp:/var/hyperledger/msp
+            - ../crypto-config/peerOrganizations/peer.org2.com/peers/peer0.peer.org2.com/tls:/var/hyperledger/tls
+            - ../crypto-config/peerOrganizations/peer.org2.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+        depends_on:
+            - orderer0.org1.com
+            - orderer0.org2.com
+        networks:
+            - behave
+        ports:
+          - "9051:7051"
+          - "9052:7052"
+          - "9053:7053"
+
+
+    peer1.peer.org2.com:
+        extends:
+            file: docker-compose-base.yml
+            service: peer
+        container_name: peer1.peer.org2.com
+        environment:
+            - CORE_PEER_CHAINCODELISTENADDRESS=peer1.peer.org2.com:7052
+            - CORE_PEER_ID=peer1.peer.org2.com
+            - CORE_PEER_ADDRESS=peer1.peer.org2.com:7051
+            - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.peer.org2.com:7051
+            - CORE_PEER_GOSSIP_ORGLEADER=false
+            - CORE_PEER_GOSSIP_USELEADERELECTION=false
+            - CORE_PEER_LOCALMSPID=Org2PeerOrgMSP
+            - CORE_PEER_TLS_CLIENTROOTCAS_FILES=/var/hyperledger/users/Admin@peer.org2.com/tls/ca.crt
+            - CORE_PEER_TLS_CLIENTCERT_FILE=/var/hyperledger/users/Admin@peer.org2.com/tls/client.crt
+            - CORE_PEER_TLS_CLIENTKEY_FILE=/var/hyperledger/users/Admin@peer.org2.com/tls/client.key
+        volumes:
+            - ../crypto-config/peerOrganizations/peer.org2.com/peers/peer1.peer.org2.com/msp:/var/hyperledger/msp
+            - ../crypto-config/peerOrganizations/peer.org2.com/peers/peer1.peer.org2.com/tls:/var/hyperledger/tls
+            - ../crypto-config/peerOrganizations/peer.org2.com/users:/var/hyperledger/users
+            - ../config/:/var/hyperledger/configs
+            - ../channel-artifacts/:/var/hyperledger/custom-configs
+        depends_on:
+            - orderer0.org1.com
+            - orderer0.org2.com
+            - peer0.peer.org2.com
+        networks:
+            - behave
+        ports:
+          - "10051:7051"
+          - "10052:7052"
+          - "10053:7053"
+
+   
