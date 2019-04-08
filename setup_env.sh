@@ -73,4 +73,6 @@ mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 /usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
 /usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
 make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
-make -C $HOME/go/src/github.com/hyperledger/fabric
+make -C $HOME/go/src/github.com/hyperledger/fabric peer orderer release docker
+
+go get -u -v github.com/therecipe/qt/cmd/... && $(go env GOPATH)/bin/qtsetup test && $(go env GOPATH)/bin/qtsetup
