@@ -64,16 +64,16 @@ echo "\nexport PATH=$PATH:~/hlf/kafka-blockshare/bin" >> ~/.bashrc
 
 
 #Get a copy of fabric and move it to the appropriate directory
-git clone https://github.com/hyperledger/fabric.git
-mkdir -p $GOPATH/src/github.com/hyperledger
-mv -f fabric $GOPATH/src/github.com/hyperledger
+#git clone https://github.com/hyperledger/fabric.git
+#mkdir -p $GOPATH/src/github.com/hyperledger
+#mv -f fabric $GOPATH/src/github.com/hyperledger
 
-git clone https://github.com/hyperledger/fabric-sdk-go.git
-mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
-/usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
-/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
-make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
-make -C $HOME/go/src/github.com/hyperledger/fabric
+#git clone https://github.com/hyperledger/fabric-sdk-go.git
+#mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
+#/usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
+#/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
+#make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
+#make -C $HOME/go/src/github.com/hyperledger/fabric
 
 #apt-get -y install libqt*5-dev qt*5-dev qt*5-doc-html
 #go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
