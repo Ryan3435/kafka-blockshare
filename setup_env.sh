@@ -75,6 +75,6 @@ mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
 make -C $HOME/go/src/github.com/hyperledger/fabric
 
-apt-get -y install libqt*5-dev qt*5-dev qt*5-doc-html
-go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
-$(go env GOPATH)/bin/qtsetup
+#apt-get -y install libqt*5-dev qt*5-dev qt*5-doc-html
+#go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
+#$(go env GOPATH)/bin/qtsetup
