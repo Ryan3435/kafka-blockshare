@@ -24,7 +24,7 @@ export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
-go get -u golang.org/x/crypto/
+go get -u golang.org/x/crypto/...
 
 #Install Docker
 curl  -fsSL  https://download.docker.com/linux/ubuntu/gpg  |  sudo  apt-key  add  -
@@ -51,6 +51,9 @@ npm install npm@5.6.0 -g
 
 #Install neccessary files for Hyperledger Fabric network
 git clone https://github.com/skcript/Kafka-Fabric-Network
+cd ./Kafka-Fabric-Network
+git checkout 0d1efa77ace5eac6bbc3195777188d9d0b1850d9
+cd ..
 mv ./Kafka-Fabric-Network/bin .
 mv ./Kafka-Fabric-Network/.env .
 rm -r Kafka-Fabric-Network
@@ -62,19 +65,24 @@ rm -r fabric-samples
 #Add the binaries needed to the path
 echo "\nexport PATH=$PATH:~/hlf/kafka-blockshare/bin" >> ~/.bashrc
 
-
 #Get a copy of fabric and move it to the appropriate directory
-#git clone https://github.com/hyperledger/fabric.git
-#mkdir -p $GOPATH/src/github.com/hyperledger
-#mv -f fabric $GOPATH/src/github.com/hyperledger
+git clone https://github.com/hyperledger/fabric.git
+cd ./fabric
+git checkout 306640d399bbea46d25bfa1673f35a3fa8187b49
+cd ..
+mkdir -p $GOPATH/src/github.com/hyperledger
+mv -f fabric $GOPATH/src/github.com/hyperledger
 
-#git clone https://github.com/hyperledger/fabric-sdk-go.git
-#mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
-#/usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
+git clone https://github.com/hyperledger/fabric-sdk-go.git
+cd ./fabric-sdk-go
+git checkout 9efe90fcb75414fddddac02c653b169e46d3c33c
+cd ..
+mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
+/usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
 #/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
-#make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
-#make -C $HOME/go/src/github.com/hyperledger/fabric
+make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
+make -C $HOME/go/src/github.com/hyperledger/fabric
 
-#apt-get -y install libqt*5-dev qt*5-dev qt*5-doc-html
-#go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
-#$(go env GOPATH)/bin/qtsetup
+apt-get -y install libqt*5-dev qt*5-dev qt*5-doc-html qt5-default
+go get -u -v -tags=no_env github.com/therecipe/qt/cmd/...
+$(go env GOPATH)/bin/qtsetup
