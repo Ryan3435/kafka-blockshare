@@ -95,7 +95,7 @@ git checkout 9efe90fcb75414fddddac02c653b169e46d3c33c
 cd ..
 mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 /usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
-/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
+#/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
 
 echo "Building fabric..."
 make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
