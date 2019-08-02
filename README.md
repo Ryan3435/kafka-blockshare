@@ -1,9 +1,3 @@
-
-
-![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/mainMenu.PNG?raw=true)
-
-
-
 # Introduction
 
 This project is the source code for the decentralized ride-hailing platform detailed in the paper listed in the title of this github.  The project utilizes Hyperledger Fabric to run several nodes in docker and facilitate the ride-hailing messages using our custom protocol.  A client application that works with real map data using Open Street Map is built using Qt for golang.  Instructions to build and run this project on a fresh installation of Ubuntu 18.04 are listed below.
