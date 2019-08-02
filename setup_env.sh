@@ -71,7 +71,7 @@ mv ./Kafka-Fabric-Network/bin .
 mv ./Kafka-Fabric-Network/.env .
 rm -r Kafka-Fabric-Network
 mkdir channel-artifacts
-curl -sSL http://bit.ly/2ysbOFE| bash -s 1.2.0 1.2.0 0.4.10
+./misc/hlf_script.sh 1.2.0 1.2.0 0.4.10
 mv ./fabric-samples/config .
 rm -r fabric-samples
 
