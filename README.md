@@ -92,7 +92,7 @@ In all environments user privacy is critical.  In a decentralized environment in
 
 This implementation uses a custom chaincode protocol to further ensure user information security. All reads/writes that are issued to the Hyperledger Fabric blockchain must be issued through a chaincode transaction.  These are invokable programs stored on the blockchain that specifiy exactly how interactions take place.  User certificates are passed implicitly to these functions and are used as part of the key during reads / writes. This ensures that no user can access information from another without having both their certificate and their password. A depiction of the transaction flow for a single ride is shown below:
 
-![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/hlfFrameworkProtocol.png?raw=true)
+![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/misc/hlfFrameworkProtocol.png?raw=true)
 
 
 
@@ -104,5 +104,5 @@ In Hyperledger Fabric all transactions are first certified by endorsing peers th
 
 
 
-![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/hlfTransactionFlow.png?raw=true)
+![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/misc/hlfTransactionFlow.png?raw=true)
 
