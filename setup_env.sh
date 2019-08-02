@@ -21,11 +21,11 @@ mv go /usr/local
 rm go1.10.4.linux-amd64.tar.gz
 
 #Add Go to env variables
-echo "\n#GO VARIABLES" >> ~/.bashrc
+echo "#GO VARIABLES" >> ~/.bashrc
 echo "export GOROOT=/usr/local/go" >> ~/.bashrc
 echo "export GOPATH=$HOME/go" >> ~/.bashrc
 echo "export PATH=$PATH:$GOROOT/bin:$GOPATH/bin" >> ~/.bashrc
-echo "#END GO VARIABLES\n" >> ~/.bashrc
+echo "#END GO VARIABLES" >> ~/.bashrc
 
  export GOROOT=/usr/local/go
  export GOPATH=$HOME/go
@@ -95,11 +95,10 @@ git checkout 9efe90fcb75414fddddac02c653b169e46d3c33c
 cd ..
 mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 /usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
-#/usr/local/go/bin/go get -u github.com/hyperledger/fabric-sdk-go
 
 echo "Building fabric..."
 make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
-make -C $HOME/go/src/github.com/hyperledger/fabric
+make -C $HOME/go/src/github.com/hyperledger/fabric native docker
 
 #Install qt5
 echo "Installing Qt..."
