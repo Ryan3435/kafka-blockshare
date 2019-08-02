@@ -76,7 +76,7 @@ mv ./fabric-samples/config .
 rm -r fabric-samples
 
 #Add the binaries needed to the path
-echo "\nexport PATH=$PATH:~/hlf/kafka-blockshare/bin" >> ~/.bashrc
+echo "export PATH=$PATH:~/hlf/kafka-blockshare/bin" >> ~/.bashrc
 
 #Get a copy of fabric and move it to the appropriate directory
 echo "Cloning fabric..."
@@ -110,7 +110,11 @@ apt-get install mesa-common-dev -y
 apt-get install libglu1-mesa-dev -y
 apt-get install qt5-default -y
 go get -u -v github.com/therecipe/qt/cmd/...
-$(go env GOPATH)/bin/qtsetup
+$(go env GOPATH)/bin/qtsetup prep
+$(go env GOPATH)/bin/qtsetup check
+$(go env GOPATH)/bin/qtsetup generate
+$(go env GOPATH)/bin/qtsetup install
+
 
 echo "export LD_LIBRARY_PATH=/home/ryan/go/src/github.com/therecipe/env_linux_amd64_513/5.13.0/gcc_64/lib/" >> ~/.bashrc
 cd $HOME/hlf/kafka-blockshare/client_applications
