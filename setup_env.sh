@@ -97,7 +97,7 @@ mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 /usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
 
 echo "Building fabric..."
-make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go
+make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go version depend-noforce license
 make -C $HOME/go/src/github.com/hyperledger/fabric native docker
 
 #Install qt5
