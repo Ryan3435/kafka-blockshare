@@ -1,6 +1,6 @@
 
 
-![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/mainMenu.png?raw=true)
+![alt text](https://github.com/Ryan3435/kafka-blockshare/blob/master/mainMenu.PNG?raw=true)
 
 
 
