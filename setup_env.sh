@@ -108,7 +108,7 @@ apt-get install build-essential -y
 apt-get install libfontconfig1 -y
 apt-get install mesa-common-dev
 apt-get install libglu1-mesa-dev -y
-apt-get install qt5-default
+apt-get install qt5-default -y
 go get -u -v github.com/therecipe/qt/cmd/...
 $(go env GOPATH)/bin/qtsetup
 
