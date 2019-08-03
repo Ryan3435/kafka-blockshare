@@ -22,7 +22,7 @@ This code has only been fully tested on Ubuntu Desktop 18.04.  An early build wa
 
    `git clone https://github.com/Ryan3435/kafka-blockshare`
 
-3. Start the installation script. Installation of tools takes a long time, be patient. This script will also build the client application and start the blockchain network.
+3. Start the installation script. Installation of tools takes a long time, be patient. This script will also build the client application and start the blockchain network. (Note: This process can take longer more than an hour.)
 
    `./setup_env.sh`
 

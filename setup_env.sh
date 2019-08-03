@@ -27,9 +27,9 @@ echo "export GOPATH=$HOME/go" >> ~/.bashrc
 echo "export PATH=$PATH:$GOROOT/bin:$GOPATH/bin" >> ~/.bashrc
 echo "#END GO VARIABLES" >> ~/.bashrc
 
- export GOROOT=/usr/local/go
- export GOPATH=$HOME/go
- export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 go get -u golang.org/x/crypto/...
 
@@ -97,8 +97,8 @@ mv -f fabric-sdk-go $GOPATH/src/github.com/hyperledger
 /usr/local/go/bin/go get -u github.com/golang/dep/cmd/dep
 
 echo "Building fabric..."
-make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go version depend-noforce license
-make -C $HOME/go/src/github.com/hyperledger/fabric native docker
+make -C $HOME/go/src/github.com/hyperledger/fabric-sdk-go depend-noforce populate-noforce populate populate-vendor license
+make -C $HOME/go/src/github.com/hyperledger/fabric native docker license gotools
 
 #Install qt5
 echo "Installing Qt..."
@@ -120,6 +120,7 @@ echo "export LD_LIBRARY_PATH=$HOME/go/src/github.com/therecipe/env_linux_amd64_5
 export LD_LIBRARY_PATH=$HOME/go/src/github.com/therecipe/env_linux_amd64_513/5.13.0/gcc_64/lib/
 cd $HOME/hlf/kafka-blockshare/client_applications
 echo "Building client application..."
+sed -i "s@/home/ryan@$HOME@g" ./main.go
 qtdeploy build
 
 echo "Starting blockchain network..."
