@@ -109,14 +109,14 @@ apt-get install libfontconfig1 -y
 apt-get install mesa-common-dev -y
 apt-get install libglu1-mesa-dev -y
 apt-get install qt5-default -y
-go get -u -v github.com/therecipe/qt/cmd/...
+go get -u -v github.com/Ryan3435/qt/cmd/...
 $(go env GOPATH)/bin/qtsetup prep
 $(go env GOPATH)/bin/qtsetup check
 $(go env GOPATH)/bin/qtsetup generate
 $(go env GOPATH)/bin/qtsetup install
 
 
-echo "export LD_LIBRARY_PATH=/home/ryan/go/src/github.com/therecipe/env_linux_amd64_513/5.13.0/gcc_64/lib/" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=$HOME/go/src/github.com/therecipe/env_linux_amd64_513/5.13.0/gcc_64/lib/" >> ~/.bashrc
 cd $HOME/hlf/kafka-blockshare/client_applications
 echo "Building client application..."
 qtdeploy build
